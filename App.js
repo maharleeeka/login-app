@@ -77,12 +77,12 @@ export default class App extends React.Component {
   }
 
   onEndEmailEditing() {
-    console.log("on end email editing");
     const error_list = this.state.error_messages;
     if (this.checkInputFieldEmail()) {
-        console.log("here here");
         if (!(this.checkEmailValidity())) {
             error_list.email_error = 'not correct format for email address';
+        } else {
+            error_list.email_error = '';
         }
     } else {
         error_list.email_error = 'field is empty';
@@ -95,6 +95,8 @@ export default class App extends React.Component {
     if (this.checkInputFieldPassword()) {
         if (!(this.checkPasswordValidity())) {
             error_list.password_error = 'please use 6 - 12 characters';
+        } else {
+            error_list.password_error = '';
         }
     } else {
         error_list.password_error = 'field is empty';
@@ -104,7 +106,7 @@ export default class App extends React.Component {
   }
 
   checkForErrors() {
-    if (this.state.error_messages.email_error || this.state.error_messages.password_error) {
+    if (this.state.error_messages.email_error != '' || this.state.error_messages.password_error != '') {
       //there is an error message
       this.setState({ button_status: false })
       return true;
@@ -137,29 +139,34 @@ export default class App extends React.Component {
               />
           </View>
           <View style={styles.formContainer}>
-            <Text style={styles.label}> Email </Text>
-            <TextInput
-              style={styles.inputStyle}
-              label="Email"
-              placeholder="Input email address"
-              value={this.state.email}
-              onChangeText={(email) => this.setState({ email })}
-              onEndEditing={this.onEndEmailEditing}
-              underlineColorAndroid='rgba(0,0,0,0)'
-            />
-            <Text style={styles.errorTextStyle}> {this.state.email_error} </Text>
+            <View style={styles.formInputCard}>
+                <Text style={styles.label}> Email </Text>
+                <TextInput
+                  style={styles.inputStyle}
+                  label="Email"
+                  placeholder="Input email address"
+                  value={this.state.email}
+                  onChangeText={(email) => this.setState({ email })}
+                  onEndEditing={this.onEndEmailEditing}
+                  underlineColorAndroid='rgba(0,0,0,0)'
+                />
+                <Text style={styles.errorTextStyle}> {this.state.error_messages.email_error} </Text>
+            </View>
 
-            <TextInput
-              style={styles.inputStyle}
-              label="Password"
-              placeholder="Input password"
-              value={this.state.password}
-              onChangeText={(password) => this.setState({ password })}
-              onEndEditing={this.onEndPasswordEditing}
-              underlineColorAndroid='rgba(0,0,0,0)'
-              secureTextEntry
-            />
-            <Text style={styles.errorTextStyle}> {this.state.password_error} </Text>
+            <View style={styles.formInputCard}>
+                <Text style={styles.label}> Password </Text>
+                <TextInput
+                  style={styles.inputStyle}
+                  label="Password"
+                  placeholder="Input password"
+                  value={this.state.password}
+                  onChangeText={(password) => this.setState({ password })}
+                  onEndEditing={this.onEndPasswordEditing}
+                  underlineColorAndroid='rgba(0,0,0,0)'
+                  secureTextEntry
+                />
+                <Text style={styles.errorTextStyle}> {this.state.error_messages.password_error} </Text>
+            </View>
 
             <TouchableOpacity
               disabled={this.state.button_status}
@@ -190,7 +197,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: Dimensions.get('window').width - 80,
-    height: Dimensions.get('window').height * .6
+    height: Dimensions.get('window').height * .55
   },
   formContainer: {
     width: '100%',
@@ -209,7 +216,9 @@ const styles = StyleSheet.create({
       borderRadius: 3
   },
   errorTextStyle: {
-    color: 'red'
+    color: 'red',
+    fontSize: 12,
+    fontStyle: 'italic'
   },
   btnStyle: {
       width: '100%',
