@@ -14,7 +14,7 @@ import {
 import { images } from './images';
 
 export default class App extends React.Component {
-  constructor(props) {
+   constructor(props) {
     super(props);
 
     this.state = {
@@ -24,19 +24,12 @@ export default class App extends React.Component {
         email_error: '',
         password_error: ''
       },
-      button_status: true
+      disable_btn: false
     }
 
     this.onEndEmailEditing = this.onEndEmailEditing.bind(this);
     this.onEndPasswordEditing = this.onEndPasswordEditing.bind(this);
-  }
-
-  onChangeEmail(email) {
-    this.setState({ email });
-  }
-
-  onChangePassword(password) {
-    this.setState({ password });
+    this.onSignInPress = this.onSignInPress.bind(this);
   }
 
   checkEmailValidity() {
@@ -49,7 +42,7 @@ export default class App extends React.Component {
   }
 
   checkPasswordValidity() {
-    curr_pw = this.state.password;
+    const curr_pw = this.state.password;
     if(curr_pw.length < 6 || curr_pw.length > 12) {
       return false;
     }
@@ -83,6 +76,7 @@ export default class App extends React.Component {
             error_list.email_error = 'not correct format for email address';
         } else {
             error_list.email_error = '';
+            this.handleBtnStatusChange();
         }
     } else {
         error_list.email_error = 'field is empty';
@@ -97,88 +91,104 @@ export default class App extends React.Component {
             error_list.password_error = 'please use 6 - 12 characters';
         } else {
             error_list.password_error = '';
+            this.handleBtnStatusChange();
         }
     } else {
         error_list.password_error = 'field is empty';
     }
 
-    this.setState({ error_messages: error_list })
+    this.setState({ error_messages: error_list });
   }
 
   checkForErrors() {
     if (this.state.error_messages.email_error != '' || this.state.error_messages.password_error != '') {
       //there is an error message
-      this.setState({ button_status: false })
+      this.setState({ disable_btn: true })
       return true;
     }
-    return false;
+      this.setState({disable_btn: false})
+      return false;
+  }
+
+  handleBtnStatusChange() {
+     if (this.checkForErrors()) {
+      this.setState({ disable_btn: true });
+    } else {
+      this.setState({ disable_btn: false });
+    }
   }
 
   onSignInPress() {
-      if (!(this.checkForErrors())) {
-          Alert.alert(
-            '',
-            'Login success!',
-            [{text: 'OK', onPress: () => {
-                console.log('login ok press');
-            }}],
-            { cancelable: false }
-          )
+    const status = this.checkForErrors();
+
+      if (!status) {
+        Alert.alert(
+          '',
+          'Login success!',
+          [{text: 'OK', onPress: () => {
+              console.log('login ok press');
+          }}],
+          { cancelable: false }
+        )
       }
   }
 
   render() {
+    if (this.checkForErrors()) {
+      this.setState({ disable_btn: true });
+    } else {
+      this.setState({ disable_btn: false });
+    }
     return (
-    <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.logoContainer}>
-              <Image
-                source={images.logo}
-                style={styles.logo}
-                resizeMode="contain"
-              />
-          </View>
-          <View style={styles.formContainer}>
-            <View style={styles.formInputCard}>
-                <Text style={styles.label}> Email </Text>
-                <TextInput
-                  style={styles.inputStyle}
-                  label="Email"
-                  placeholder="Input email address"
-                  value={this.state.email}
-                  onChangeText={(email) => this.setState({ email })}
-                  onEndEditing={this.onEndEmailEditing}
-                  underlineColorAndroid='rgba(0,0,0,0)'
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+            <View style={styles.logoContainer}>
+                <Image
+                  source={images.logo}
+                  style={styles.logo}
+                  resizeMode="contain"
                 />
-                <Text style={styles.errorTextStyle}> {this.state.error_messages.email_error} </Text>
             </View>
+             <View style={styles.formContainer}>
+                <View style={styles.formInputCard}>
+                  <Text style={styles.label}> Email </Text>
+                  <TextInput
+                    style={styles.inputStyle}
+                    label="Email"
+                    placeholder="Input email address"
+                    value={this.state.email}
+                    onChangeText={(email) => this.setState({ email })}
+                    onEndEditing={this.onEndEmailEditing}
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                  />
+                  <Text style={styles.errorTextStyle}> {this.state.error_messages.email_error} </Text>
+               </View>
+                <View style={styles.formInputCard}>
+                    <Text style={styles.label}> Password </Text>
+                    <TextInput
+                      style={styles.inputStyle}
+                      label="Password"
+                      placeholder="Input password"
+                      value={this.state.password}
+                      onChangeText={(password) => this.setState({ password })}
+                      onEndEditing={this.onEndPasswordEditing}
+                      underlineColorAndroid='rgba(0,0,0,0)'
+                      secureTextEntry
+                    />
+                    <Text style={styles.errorTextStyle}> {this.state.error_messages.password_error} </Text>
+                </View>
+              <TouchableOpacity
+                disabled={this.state.disable_btn}
+                style={
+                  [this.state.disable_btn ? styles.btnStyleDisabled : styles.btnStyle]
+                }
+                onPress={this.onSignInPress}
+              >
+                <Text style={{ color: '#fff'}}> Sign In </Text>
+              </TouchableOpacity>
 
-            <View style={styles.formInputCard}>
-                <Text style={styles.label}> Password </Text>
-                <TextInput
-                  style={styles.inputStyle}
-                  label="Password"
-                  placeholder="Input password"
-                  value={this.state.password}
-                  onChangeText={(password) => this.setState({ password })}
-                  onEndEditing={this.onEndPasswordEditing}
-                  underlineColorAndroid='rgba(0,0,0,0)'
-                  secureTextEntry
-                />
-                <Text style={styles.errorTextStyle}> {this.state.error_messages.password_error} </Text>
-            </View>
-
-            <TouchableOpacity
-              disabled={this.state.button_status}
-              style={styles.btnStyle}
-              onPress={this.onSignInPress}
-            >
-              <Text style={{ color: '#fff'}}> Sign In </Text>
-            </TouchableOpacity>
-
-          </View>
-        </View>
-    </ScrollView>
+             </View>
+            <View style={{ height: 130 }} />
+          </KeyboardAvoidingView>
     );
   }
 }
