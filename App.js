@@ -218,7 +218,8 @@ const styles = StyleSheet.create({
   errorTextStyle: {
     color: 'red',
     fontSize: 12,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    paddingVertical: 3
   },
   btnStyle: {
       width: '100%',
