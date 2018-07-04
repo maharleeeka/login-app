@@ -196,22 +196,18 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
-    height: '100%',
-    paddingHorizontal: 20
+  },
+  formContainer: {
+    width: '100%',
+    padding: 10,
   },
   logoContainer: {
-    marginTop: 40
+    paddingTop: 40,
   },
   logo: {
     width: Dimensions.get('window').width - 80,
     height: Dimensions.get('window').height * .55
-  },
-  formContainer: {
-    width: '100%',
-    padding: 10
   },
   label: {
     fontSize: 18
@@ -219,11 +215,11 @@ const styles = StyleSheet.create({
   inputStyle: {
       color: '#333',
       fontSize: 16,
-      flex: 1,
-      padding: 5,
+      height: 40,
       borderWidth: 1,
       borderColor: '#341769',
-      borderRadius: 3
+      borderRadius: 3,
+      padding: 5
   },
   errorTextStyle: {
     color: 'red',
@@ -237,6 +233,14 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       height: 50,
       backgroundColor: '#341769',
+      borderRadius: 3
+  },
+  btnStyleDisabled: {
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 50,
+      backgroundColor: '#e3e3e3',
       borderRadius: 3
   }
 });
