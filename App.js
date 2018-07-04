@@ -113,16 +113,16 @@ export default class App extends React.Component {
   }
 
   onSignInPress() {
-    this.checkForErrors().catch(() => {
-      Alert.alert(
-        '',
-        'Login success!',
-        [{text: 'OK', onPress: () => {
-            console.log('login ok press');
-        }}],
-        { cancelable: false }
-      )
-    });
+      if (!(this.checkForErrors())) {
+          Alert.alert(
+            '',
+            'Login success!',
+            [{text: 'OK', onPress: () => {
+                console.log('login ok press');
+            }}],
+            { cancelable: false }
+          )
+      }
   }
 
   render() {
@@ -162,6 +162,7 @@ export default class App extends React.Component {
             <Text style={styles.errorTextStyle}> {this.state.password_error} </Text>
 
             <TouchableOpacity
+              disabled={this.state.button_status}
               style={styles.btnStyle}
               onPress={this.onSignInPress}
             >
