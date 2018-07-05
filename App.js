@@ -47,7 +47,7 @@ export default class App extends React.Component {
 
   checkPasswordValidity() {
     const curr_pw = this.state.password;
-    if(curr_pw.length >= 5 && curr_pw.length <= 11) {
+    if(curr_pw.length >= 6 && curr_pw.length <= 12) {
       return true;
     }
     return false;
