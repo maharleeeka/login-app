@@ -34,6 +34,7 @@ export default class App extends React.Component {
     this.onSignInPress = this.onSignInPress.bind(this);
   }
 
+  // function that checks the format of the email input
   checkEmailValidity() {
       let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (re.test(this.state.email)) {
@@ -43,6 +44,7 @@ export default class App extends React.Component {
       }
   }
 
+  // function that checks the length of the password input
   checkPasswordValidity() {
     const curr_pw = this.state.password;
     if(curr_pw.length >= 6 && curr_pw.length <= 12) {
@@ -75,6 +77,7 @@ export default class App extends React.Component {
     this.setState({ disable_btn: false})
   }
 
+  // function that executes after the user inputs an email
   onEndEmailEditing() {
     const error_list = this.state.error_messages;
     if (this.checkInputFieldEmail()) {
@@ -91,6 +94,7 @@ export default class App extends React.Component {
     this.setState({ error_messages: error_list });
   }
 
+  // function that executes after the user inputs a password
   onEndPasswordEditing() {
     const error_list = this.state.error_messages;
     if (this.checkInputFieldPassword()) {
@@ -115,6 +119,7 @@ export default class App extends React.Component {
       return false;
   }
 
+  // handles status for sign in button
   handleBtnStatusChange() {
     if (this.checkForErrors()) {
       this.setState({ disable_btn: true });
