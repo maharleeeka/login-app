@@ -4,6 +4,7 @@ import {
   Button,
   Dimensions,
   Image,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,6 +30,9 @@ export default class App extends React.Component {
 
     this.onEndEmailEditing = this.onEndEmailEditing.bind(this);
     this.onEndPasswordEditing = this.onEndPasswordEditing.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.handleBtnStatusChange = this.handleBtnStatusChange.bind(this);
     this.onSignInPress = this.onSignInPress.bind(this);
   }
 
@@ -43,10 +47,10 @@ export default class App extends React.Component {
 
   checkPasswordValidity() {
     const curr_pw = this.state.password;
-    if(curr_pw.length < 6 || curr_pw.length > 12) {
-      return false;
+    if(curr_pw.length >= 5 && curr_pw.length <= 11) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   checkInputFieldEmail() {
@@ -69,14 +73,23 @@ export default class App extends React.Component {
     return true;
   }
 
+  onChangeEmail(email) {
+    this.setState({ email })
+    this.setState({ disable_btn: false})
+  }
+  onChangePassword(password) {
+    this.setState({ password })
+    this.setState({ disable_btn: false})
+  }
   onEndEmailEditing() {
     const error_list = this.state.error_messages;
     if (this.checkInputFieldEmail()) {
         if (!(this.checkEmailValidity())) {
             error_list.email_error = 'not correct format for email address';
+            //this.handleBtnStatusChange();
         } else {
             error_list.email_error = '';
-            this.handleBtnStatusChange();
+            //this.handleBtnStatusChange();
         }
     } else {
         error_list.email_error = 'field is empty';
@@ -89,9 +102,10 @@ export default class App extends React.Component {
     if (this.checkInputFieldPassword()) {
         if (!(this.checkPasswordValidity())) {
             error_list.password_error = 'please use 6 - 12 characters';
+            //this.handleBtnStatusChange();
         } else {
             error_list.password_error = '';
-            this.handleBtnStatusChange();
+            //this.handleBtnStatusChange();
         }
     } else {
         error_list.password_error = 'field is empty';
@@ -103,15 +117,14 @@ export default class App extends React.Component {
   checkForErrors() {
     if (this.state.error_messages.email_error != '' || this.state.error_messages.password_error != '') {
       //there is an error message
-      this.setState({ disable_btn: true })
       return true;
     }
-      this.setState({disable_btn: false})
       return false;
   }
 
   handleBtnStatusChange() {
-     if (this.checkForErrors()) {
+    console.log(this.state.error_messages);
+    if (this.checkForErrors()) {
       this.setState({ disable_btn: true });
     } else {
       this.setState({ disable_btn: false });
@@ -119,6 +132,8 @@ export default class App extends React.Component {
   }
 
   onSignInPress() {
+    this.onEndEmailEditing()
+    this.onEndPasswordEditing()
     const status = this.checkForErrors();
 
       if (!status) {
@@ -134,11 +149,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    if (this.checkForErrors()) {
-      this.setState({ disable_btn: true });
-    } else {
-      this.setState({ disable_btn: false });
-    }
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <View style={styles.logoContainer}>
@@ -155,8 +165,9 @@ export default class App extends React.Component {
                     style={styles.inputStyle}
                     label="Email"
                     placeholder="Input email address"
+                    keyboardType="email-address"
                     value={this.state.email}
-                    onChangeText={(email) => this.setState({ email })}
+                    onChangeText={(email) => {this.onChangeEmail(email)}}
                     onEndEditing={this.onEndEmailEditing}
                     underlineColorAndroid='rgba(0,0,0,0)'
                   />
@@ -169,7 +180,7 @@ export default class App extends React.Component {
                       label="Password"
                       placeholder="Input password"
                       value={this.state.password}
-                      onChangeText={(password) => this.setState({ password })}
+                      onChangeText={(password) => {this.onChangePassword(password)}}
                       onEndEditing={this.onEndPasswordEditing}
                       underlineColorAndroid='rgba(0,0,0,0)'
                       secureTextEntry
@@ -197,6 +208,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center'
   },
   formContainer: {
     width: '100%',
@@ -204,10 +216,12 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     paddingTop: 40,
-  },
-  logo: {
     width: Dimensions.get('window').width - 80,
     height: Dimensions.get('window').height * .55
+  },
+  logo: {
+    width: '100%',
+    height: '100%'
   },
   label: {
     fontSize: 18
