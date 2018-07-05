@@ -1,11 +1,9 @@
 import React from 'react';
 import {
   Alert,
-  Button,
   Dimensions,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -59,15 +57,9 @@ export default class App extends React.Component {
     }
     return true;
   }
+
   checkInputFieldPassword() {
     if (this.state.password === '') {
-      return false;
-    }
-    return true;
-  }
-
-  checkInputField() {
-    if (this.state.email === '' || this.state.password === '') {
       return false;
     }
     return true;
@@ -77,10 +69,12 @@ export default class App extends React.Component {
     this.setState({ email })
     this.setState({ disable_btn: false})
   }
+
   onChangePassword(password) {
     this.setState({ password })
     this.setState({ disable_btn: false})
   }
+
   onEndEmailEditing() {
     const error_list = this.state.error_messages;
     if (this.checkInputFieldEmail()) {
@@ -116,14 +110,12 @@ export default class App extends React.Component {
 
   checkForErrors() {
     if (this.state.error_messages.email_error != '' || this.state.error_messages.password_error != '') {
-      //there is an error message
       return true;
     }
       return false;
   }
 
   handleBtnStatusChange() {
-    console.log(this.state.error_messages);
     if (this.checkForErrors()) {
       this.setState({ disable_btn: true });
     } else {
@@ -141,7 +133,7 @@ export default class App extends React.Component {
           '',
           'Login success!',
           [{text: 'OK', onPress: () => {
-              console.log('login ok press');
+              console.log('Login is successful.');
           }}],
           { cancelable: false }
         )
@@ -173,7 +165,7 @@ export default class App extends React.Component {
                     underlineColorAndroid='rgba(0,0,0,0)'
                   />
                   <Text style={styles.errorTextStyle}> {this.state.error_messages.email_error} </Text>
-               </View>
+                </View>
                 <View style={styles.formInputCard}>
                     <Text style={styles.label}> Password </Text>
                     <TextInput
@@ -185,22 +177,21 @@ export default class App extends React.Component {
                       onEndEditing={this.onEndPasswordEditing}
                       underlineColorAndroid='rgba(0,0,0,0)'
                       secureTextEntry
-                    />
-                    <Text style={styles.errorTextStyle}> {this.state.error_messages.password_error} </Text>
+                     />
+                      <Text style={styles.errorTextStyle}> {this.state.error_messages.password_error} </Text>
                 </View>
 
-              <TouchableOpacity
-                disabled={this.state.disable_btn}
-                style={
-                  [this.state.disable_btn ? [styles.btnStyle,styles.btnStyleDisabled] : styles.btnStyle]
-                }
-                onPress={this.onSignInPress}
-              >
-                <Text style={styles.btnText}> Sign In </Text>
-              </TouchableOpacity>
-
+                <TouchableOpacity
+                    disabled={this.state.disable_btn}
+                    style={
+                        [this.state.disable_btn ? [styles.btnStyle,styles.btnStyleDisabled] : styles.btnStyle]
+                    }
+                    onPress={this.onSignInPress}
+                >
+                    <Text style={styles.btnText}> Sign In </Text>
+                </TouchableOpacity>
              </View>
-            <View style={{ height: 130 }} />
+             <View style={{ height: 120 }} />
           </KeyboardAvoidingView>
     );
   }
