@@ -86,10 +86,10 @@ export default class App extends React.Component {
     if (this.checkInputFieldEmail()) {
         if (!(this.checkEmailValidity())) {
             error_list.email_error = 'not correct format for email address';
-            //this.handleBtnStatusChange();
+            this.handleBtnStatusChange();
         } else {
             error_list.email_error = '';
-            //this.handleBtnStatusChange();
+            this.handleBtnStatusChange();
         }
     } else {
         error_list.email_error = 'field is empty';
@@ -101,11 +101,11 @@ export default class App extends React.Component {
     const error_list = this.state.error_messages;
     if (this.checkInputFieldPassword()) {
         if (!(this.checkPasswordValidity())) {
-            error_list.password_error = 'please use 6 - 12 characters';
-            //this.handleBtnStatusChange();
+            error_list.password_error = 'please use at least 6 - 12 characters';
+            this.handleBtnStatusChange();
         } else {
             error_list.password_error = '';
-            //this.handleBtnStatusChange();
+            this.handleBtnStatusChange();
         }
     } else {
         error_list.password_error = 'field is empty';
@@ -169,6 +169,7 @@ export default class App extends React.Component {
                     value={this.state.email}
                     onChangeText={(email) => {this.onChangeEmail(email)}}
                     onEndEditing={this.onEndEmailEditing}
+                    autoCapitalize="none"
                     underlineColorAndroid='rgba(0,0,0,0)'
                   />
                   <Text style={styles.errorTextStyle}> {this.state.error_messages.email_error} </Text>
@@ -213,6 +214,7 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '100%',
     padding: 10,
+    paddingTop: 50
   },
   logoContainer: {
     paddingTop: 40,
@@ -224,16 +226,17 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   label: {
-    fontSize: 18
+    fontSize: 18,
+    paddingHorizontal: 5
   },
   inputStyle: {
       color: '#333',
       fontSize: 16,
       height: 40,
       borderWidth: 1,
-      borderColor: '#341769',
+      borderColor: '#aa8fdb',
       borderRadius: 3,
-      padding: 5
+      padding: 10
   },
   errorTextStyle: {
     color: 'red',
@@ -246,7 +249,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       height: 50,
-      backgroundColor: '#341769',
+      backgroundColor: '#714db2',
       borderRadius: 3
   },
   btnStyleDisabled: {
